@@ -59,7 +59,7 @@ def main():
     ax.set_xlabel('время записи, с'); ax.set_ylabel('ошибка 3D, м (лог.)'); ax.grid(alpha=0.3, which='both')
     ax.set_title('Ошибка положения base_link: RMSE %.2f м (до конечной «Таллинская» %.2f м)' % (
         math.sqrt(sum(e * e for e in err) / len(err)),
-        math.sqrt(sum(e * e for t, e in zip(tp, err) if t < 1230) / max(1, sum(1 for t in tp if t < 1230)))))
+        math.sqrt(sum(e * e for t, e in zip(tp, err) if t < 1270) / max(1, sum(1 for t in tp if t < 1270)))))
     fig.tight_layout(); fig.savefig(out / 'position_error.png', dpi=90); plt.close(fig)
     # --- траектория на карте
     tm = TrackMap(cfg['map_files'])
