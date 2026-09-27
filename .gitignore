@@ -1,0 +1,29 @@
+# сборка colcon
+build/
+install/
+log/
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+
+# данные и результаты прогонов — в репозиторий не кладём
+data/
+dataset/
+pathgraph/
+analysis/out/
+out/
+run_*/
+*.db3
+*.mcap
+*.bag
+*.zip
+*.tgz
+
+# системное
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

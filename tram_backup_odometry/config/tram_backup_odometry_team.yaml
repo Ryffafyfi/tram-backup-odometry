@@ -1,0 +1,95 @@
+# Параметры ноды tram_backup_odometry (ROS 2 Humble) — вариант с альтернативным оценщиком (team_estimator.py).
+# Отличается от tram_backup_odometry.yaml двумя строками: estimator_class и agreed_api_velocity_scale.
+# Запуск: ros2 launch tram_backup_odometry tram_backup_odometry.launch.py \
+#   params_file:=$(ros2 pkg prefix tram_backup_odometry)/share/tram_backup_odometry/config/tram_backup_odometry_team.yaml
+# Пути к файлам — относительно share/tram_backup_odometry (или абсолютные).
+tram_backup_odometry:
+  ros__parameters:
+    # ---------------- топики (контракт судьи) ----------------
+    front_topic: /vehicle/front_bogie_velocity
+    rear_topic: /vehicle/rear_bogie_velocity
+    cmd_topic: /vehicle/driver_position_cmd
+    velocity_out_topic: /result/velocity
+    position_out_topic: /result/position
+    diagnostics_topic: /diagnostics
+    input_qos_reliable: false        # best-effort подписка совместима с любым издателем
+
+    # ---------------- кадры ----------------
+    map_frame: map
+    base_frame: base_link
+
+    # ---------------- карта путей (pathgraph) ----------------
+    map_files:
+      - maps/shchukinskaya_tallinskaya.json   # выданный pathgraph (Щукинская -> Таллинская)
+      - maps/tallinskaya_shchukinskaya.json   # выданный pathgraph (Таллинская -> Щукинская)
+      - maps/terminal_loops.json              # разворотные петли у конечных (восстановлены по GNSS обучающих записей)
+    # ветка, которой нет в графе: средний путь «Таллинской» (по GNSS обучающих записей, tools/build_branch_track.py);
+    # после стрелки положение выдаётся взвешенно «петля / средний путь» по частоте в обучающих записях
+    branch_map_files:
+      - maps/tallinskaya_middle.json
+    # места остановок (стоп-линии, платформы) по обучающим записям — продольные ориентиры
+    stop_landmarks_file: maps/stop_landmarks.json
+    # линии пути в формате track_*.csv (s, x, y, z, heading, curvature, grade; петли достроены) —
+    # track_map для альтернативного оценщика (интерфейс on_notch / on_bogie / state)
+    track_csv_files:
+      - maps/track_tallinskaya_shchukinskaya.csv
+      - maps/track_shchukinskaya_tallinskaya.csv
+
+    # ---------------- перевод GNSS -> система карты ----------------
+    # map = UTM 37N (поперечная Меркатора, lon0=39, k0=0.9996, FE=500000) минус (300000, 6100000)
+    gnss_tm_lon0_deg: 39.0
+    gnss_tm_k0: 0.9996
+    gnss_tm_false_easting: 500000.0
+    gnss_tm_false_northing: 0.0
+    gnss_map_offset_x: -300000.0
+    gnss_map_offset_y: -6100000.0
+    gnss_map_offset_z: 0.0
+
+    # ---------------- GNSS только для старта ----------------
+    gnss_master_fix_topic: /sensing/gnss/master/fix
+    gnss_master_vel_topic: /sensing/gnss/master/vel
+    gnss_rover_fix_topic: /sensing/gnss/rover/fix
+    gnss_rover_vel_topic: /sensing/gnss/rover/vel
+    gnss_init_duration_sec: 5.0      # столько секунд (по времени записи) GNSS передаётся оценщику
+    gnss_init_max_wait_sec: 20.0     # если за это время нет ни одного фикса — окно закрывается всё равно
+    gnss_init_min_fixes: 10          # окно не закрывается раньше, чем придёт столько фиксов (master+rover)
+    # Выключено: GNSS только для старта, подписки удаляются. true — подписки остаются, редкие
+    # фиксы в середине маршрута используются для коррекции (опция для экспериментов).
+    gnss_midroute_corrections: false
+
+    # ---------------- геометрия трамвая (м, в base_link) ----------------
+    # base_link — ось поворота передней тележки, по высоте — точка касания колеса и рельса
+    antenna_master_xyz: [-9.873, 0.0, 3.0]
+    antenna_rover_xyz: [2.563, 0.0, 3.0]
+    bogie_distance: 7.55             # между осями поворота передней и задней тележек
+
+    # ---------------- оценщик ----------------
+    estimator_class: tram_backup_odometry.team_estimator:Estimator   # альтернативный оценщик (mathpython.py)
+    fallback_estimator_class: tram_backup_odometry.baseline_estimator:BaselineEstimator
+    fallback_on_error: true          # при исключении/NaN основного оценщика — ответ резервного
+    coefficients_file: config/params.yaml               # коэффициенты физической модели: коэффициенты модели -> основной оценщик
+    baseline_coefficients_file: config/baseline_params.yaml  # коэффициенты базового (резервного) оценщика
+    # оценщик с интерфейсом on_notch/on_bogie/state (Estimator(params, track_map), on_notch, on_bogie, state)
+    # подключается автоматически через переходник agreed_api.py:
+    agreed_api_velocity_scale: 1.0   # альтернативный оценщик сам делит км/ч на 3.6 — передаём сырое значение
+    agreed_api_track_map: csv        # csv — {направление: линия из maps/track_*.csv}; graph — граф путей ноды; none
+
+    # ---------------- пропуски входов ----------------
+    gap_timeout_sec: 0.07            # нет входов дольше — публикуем прогноз оценщика (ответы не реже 10 Гц)
+    gap_publish_period_sec: 0.05     # период прогноза (20 Гц)
+    max_gap_fill_sec: 30.0           # дольше не прогнозируем (запись закончилась)
+    playback_rate: 0.0               # 0 = оценивать скорость воспроизведения автоматически
+
+    # ---------------- живучесть ----------------
+    time_jump_reset_sec: 3.0         # скачок времени назад > 3 c (запись запущена заново) -> новая сессия
+    time_jump_forward_sec: 30.0
+    topic_jump_sec: 0.6              # скачок stamp внутри топика больше этого — проверяется по остальным топикам
+    topic_ahead_tolerance_sec: 0.3   # насколько stamp может опережать оценённое время записи
+    publish_position_before_init: false
+
+    # ---------------- диагностика и замеры ----------------
+    diagnostics_period_sec: 1.0
+    stats_log_period_sec: 10.0
+    metrics_dir: ""                  # пусто = ~/.ros/log/tram_backup_odometry/
+    hardware_id: tram_30618
+    vehicle_id: "30618"              # выбор калибровки колёс (velocity_scale_by_vehicle в baseline_params.yaml)

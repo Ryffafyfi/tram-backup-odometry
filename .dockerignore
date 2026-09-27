@@ -1,0 +1,14 @@
+.git
+build
+install
+log
+data
+out
+run_*
+**/__pycache__
+**/*.pyc
+**/.DS_Store
+*.db3
+*.mcap
+*.zip
+*.tgz

@@ -1,0 +1,334 @@
+# params.yaml — Резервная одометрия трамвая
+# Ключи rover_x, master_x, bogie_span, stop_v_thr, stop_agree_s
+# совпадают с именами в team_estimator.py
+
+rover_x: 2.563
+master_x: -9.873
+bogie_span: 7.55
+antenna_span: 12.436
+stop_v_thr: 0.05
+stop_agree_s: 2.0
+vehicle:
+  mass_tare_kg: 22000
+  mass_full_kg: 35000
+  mass_nom_kg: 28000
+  wheel_radius_m: 0.35
+  gear_ratio: 6.5
+  n_motors: 4
+  motor_power_kw: 72
+  total_power_kw: 288
+  motor_torque_nm: 500
+  drive_efficiency: 0.85
+  v_max_ms: 20.83
+  notch_gamma: 0.5
+resistance:
+  a0: 0.05
+  a1: 0.002
+curve_resistance:
+  k_curve: 6.867
+  min_radius_m: 15
+grade:
+  enabled: true
+  source: pathgraph
+  g: 9.81
+speed_bins:
+- 0
+- 2
+- 5
+- 8
+- 12
+- 16
+- 21
+traction_table:
+  '1':
+    0-2: 0.3425
+    2-5: 0.3425
+    5-8: 0.3425
+    8-12: 0.2257
+    12-16: 0.1612
+    16-21: 0.122
+  '2':
+    0-2: 0.4844
+    2-5: 0.4844
+    5-8: 0.4844
+    8-12: 0.3192
+    12-16: 0.228
+    16-21: 0.1726
+  '3':
+    0-2: 0.5932
+    2-5: 0.5932
+    5-8: 0.5932
+    8-12: 0.391
+    12-16: 0.2793
+    16-21: 0.2113
+  '4':
+    0-2: 0.685
+    2-5: 0.685
+    5-8: 0.685
+    8-12: 0.4515
+    12-16: 0.3225
+    16-21: 0.244
+  '5':
+    0-2: 0.7659
+    2-5: 0.7659
+    5-8: 0.7659
+    8-12: 0.5048
+    12-16: 0.3605
+    16-21: 0.2728
+  '6':
+    0-2: 0.839
+    2-5: 0.839
+    5-8: 0.839
+    8-12: 0.5529
+    12-16: 0.395
+    16-21: 0.2989
+  '7':
+    0-2: 0.9062
+    2-5: 0.9062
+    5-8: 0.9062
+    8-12: 0.5973
+    12-16: 0.4266
+    16-21: 0.3228
+  '8':
+    0-2: 0.9688
+    2-5: 0.9688
+    5-8: 0.9688
+    8-12: 0.6385
+    12-16: 0.4561
+    16-21: 0.3451
+  '9':
+    0-2: 1.0275
+    2-5: 1.0275
+    5-8: 1.0275
+    8-12: 0.6772
+    12-16: 0.4837
+    16-21: 0.3661
+  '10':
+    0-2: 1.0831
+    2-5: 1.0831
+    5-8: 1.0831
+    8-12: 0.7139
+    12-16: 0.5099
+    16-21: 0.3859
+  '11':
+    0-2: 1.136
+    2-5: 1.136
+    5-8: 1.136
+    8-12: 0.7487
+    12-16: 0.5348
+    16-21: 0.4047
+  '12':
+    0-2: 1.1865
+    2-5: 1.1865
+    5-8: 1.1865
+    8-12: 0.782
+    12-16: 0.5586
+    16-21: 0.4227
+  '13':
+    0-2: 1.2349
+    2-5: 1.2349
+    5-8: 1.2349
+    8-12: 0.8139
+    12-16: 0.5814
+    16-21: 0.44
+  '14':
+    0-2: 1.2816
+    2-5: 1.2816
+    5-8: 1.2816
+    8-12: 0.8446
+    12-16: 0.6033
+    16-21: 0.4566
+  '15':
+    0-2: 1.3265
+    2-5: 1.3265
+    5-8: 1.3265
+    8-12: 0.8743
+    12-16: 0.6245
+    16-21: 0.4726
+braking_table:
+  '1':
+    0-2: -0.1667
+    2-5: -0.1667
+    5-8: -0.1667
+    8-12: -0.1667
+    12-16: -0.15
+    16-21: -0.15
+  '2':
+    0-2: -0.3333
+    2-5: -0.3333
+    5-8: -0.3333
+    8-12: -0.3333
+    12-16: -0.3
+    16-21: -0.3
+  '3':
+    0-2: -0.5
+    2-5: -0.5
+    5-8: -0.5
+    8-12: -0.5
+    12-16: -0.45
+    16-21: -0.45
+  '4':
+    0-2: -0.6667
+    2-5: -0.6667
+    5-8: -0.6667
+    8-12: -0.6667
+    12-16: -0.6
+    16-21: -0.6
+  '5':
+    0-2: -0.8333
+    2-5: -0.8333
+    5-8: -0.8333
+    8-12: -0.8333
+    12-16: -0.75
+    16-21: -0.75
+  '6':
+    0-2: -1.0
+    2-5: -1.0
+    5-8: -1.0
+    8-12: -1.0
+    12-16: -0.9
+    16-21: -0.9
+  '7':
+    0-2: -1.1667
+    2-5: -1.1667
+    5-8: -1.1667
+    8-12: -1.1667
+    12-16: -1.05
+    16-21: -1.05
+  '8':
+    0-2: -1.3333
+    2-5: -1.3333
+    5-8: -1.3333
+    8-12: -1.3333
+    12-16: -1.2
+    16-21: -1.2
+  '9':
+    0-2: -1.5
+    2-5: -1.5
+    5-8: -1.5
+    8-12: -1.5
+    12-16: -1.35
+    16-21: -1.35
+  '10':
+    0-2: -1.6667
+    2-5: -1.6667
+    5-8: -1.6667
+    8-12: -1.6667
+    12-16: -1.5
+    16-21: -1.5
+  '11':
+    0-2: -1.8333
+    2-5: -1.8333
+    5-8: -1.8333
+    8-12: -1.8333
+    12-16: -1.65
+    16-21: -1.65
+  '12':
+    0-2: -2.0
+    2-5: -2.0
+    5-8: -2.0
+    8-12: -2.0
+    12-16: -1.8
+    16-21: -1.8
+  '13':
+    0-2: -2.1667
+    2-5: -2.1667
+    5-8: -2.1667
+    8-12: -2.1667
+    12-16: -1.95
+    16-21: -1.95
+  '14':
+    0-2: -2.3333
+    2-5: -2.3333
+    5-8: -2.3333
+    8-12: -2.3333
+    12-16: -2.1
+    16-21: -2.1
+  '15':
+    0-2: -2.5
+    2-5: -2.5
+    5-8: -2.5
+    8-12: -2.5
+    12-16: -2.25
+    16-21: -2.25
+wheel_correction:
+  '30618':
+    bias_pct: -0.0851
+    factor_front: 1.000852
+    factor_rear: 1.000852
+  '30639':
+    bias_pct: 0.3394
+    factor_front: 0.996617
+    factor_rear: 0.996617
+  default:
+    bias_pct: 0.0
+    factor_front: 1.0
+    factor_rear: 1.0
+slip_correction:
+  accel_overshoot_pct: 3.0
+  brake_undershoot_pct: 2.0
+  front:
+    accel_factor: 1.03
+    brake_factor: 0.98
+  rear:
+    accel_factor: 1.02
+    brake_factor: 0.98
+slip_detection:
+  v_diff_threshold: 0.5
+  min_duration_s: 0.3
+  recovery_window_s: 1.0
+  sensor_timeout_s: 2.0
+  max_sensor_silence_s: 74
+  late_msg_threshold_s: 1.1
+  slip_flag_margin: 0.1
+filter:
+  alpha_wheel: 0.7
+  alpha_model: 0.3
+  alpha_wheel_slip: 0.0
+  alpha_model_slip: 1.0
+  blend_rate: 0.15
+adhesion:
+  mu_dry: 0.25
+  mu_wet: 0.15
+  mu_ice: 0.08
+  default_mu: 0.25
+  estimation_enabled: true
+  g: 9.81
+loading:
+  mass_min_kg: 22000
+  mass_max_kg: 37000
+  estimation_enabled: true
+  learning_rate: 0.01
+  min_samples: 50
+preprocessing:
+  input_unit: kmh
+  conversion_factor: 0.277778
+  notch_dt: 0.05
+  bogie_dt_nominal: 0.1
+  interpolation: linear
+  output_rate_hz: 20
+gnss:
+  use_for_init_only: true
+  antennas:
+  - master
+  - rover
+  rover_position: front
+  master_position: rear
+  min_fixes_for_bootstrap: 1
+  bootstrap_timeout_s: 10.0
+performance:
+  publish_rate_hz: 20
+  max_latency_ms: 100
+  degraded_latency_ms: 250
+  max_cpu_cores: 2
+  max_ram_mb: 512
+topics:
+  sub_front_bogie: /vehicle/front_bogie_velocity
+  sub_rear_bogie: /vehicle/rear_bogie_velocity
+  sub_driver_cmd: /vehicle/driver_position_cmd
+  sub_gnss_master_fix: /sensing/gnss/master/fix
+  sub_gnss_master_vel: /sensing/gnss/master/vel
+  sub_gnss_rover_fix: /sensing/gnss/rover/fix
+  sub_gnss_rover_vel: /sensing/gnss/rover/vel
+  pub_velocity: /result/velocity
+  pub_position: /result/position
