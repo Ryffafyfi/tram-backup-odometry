@@ -7,7 +7,7 @@ import pandas as pd
 from scipy.spatial import cKDTree
 
 ROOT = Path(__file__).resolve().parents[1]
-MAP_DIR = ROOT / 'map'              # карта с кольцами: track_<направление>.csv
+MAP_DIR = ROOT / 'tram_backup_odometry' / 'maps'  # карта с кольцами: track_<направление>.csv (в пакете ROS 2)
 PATHGRAPH_DIR = ROOT / 'pathgraph'  # исходный pathgraph организаторов (в репозиторий не входит)
 # направление → (файл pathgraph, начальная конечная, конечная конечная)
 DIRECTIONS = {
@@ -19,7 +19,7 @@ DIRECTIONS = {
 def load_pathgraph(direction):
     """Линия pathgraph как таблица s, x, y, z, heading, curvature (s — номер точки, шаг 1 м)."""
     name = DIRECTIONS[direction][0]
-    path = PATHGRAPH_DIR / name if (PATHGRAPH_DIR / name).exists() else MAP_DIR / name  # у команды json в карта/
+    path = PATHGRAPH_DIR / name if (PATHGRAPH_DIR / name).exists() else MAP_DIR / f'{direction}.json'
     d = json.loads(path.read_text(encoding='utf-8'))
     pts = [d['points'][i] for i in d['paths'][0]['point_indices']]
     df = pd.DataFrame({'x': [p['x'] for p in pts], 'y': [p['y'] for p in pts],

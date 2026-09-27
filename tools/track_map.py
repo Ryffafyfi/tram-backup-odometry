@@ -1,7 +1,7 @@
 """Карта пути для оценщика (Estimator из mathpython.py). Чистый Python без numpy и pandas — можно прямо в ноду.
 
 Реализует интерфейсы TrackMap и GnssTransformer из mathpython.py:
-  TrackMap(map_dir)                       загружает map/track_<направление>.csv (линии с разворотными кольцами)
+  TrackMap(map_dir)                       загружает tram_backup_odometry/maps/track_<направление>.csv (линии с разворотными кольцами)
   select_direction(x, y, heading) → str   выбирает линию по положению base_link в начале записи
   project_to_path(x, y) → s               метры вдоль выбранной линии
   get_pose_at(s) → (x, y, z, heading)     точка линии: z — уровень рельса, heading — курс пути, рад
@@ -10,7 +10,7 @@
   GnssToMap().to_utm(lat, lon, alt)       GNSS → координаты карты = UTM 37 минус (300 000, 6 100 000)
 
 Пример:
-  track = TrackMap('map'); gnss = GnssToMap()
+  track = TrackMap(); gnss = GnssToMap()
   x, y, z = gnss.to_utm(lat, lon, alt)                  # точка антенны в координатах карты
   direction = track.select_direction(x_bl, y_bl, heading)
   s = track.project_to_path(x_bl, y_bl)
@@ -85,7 +85,8 @@ class _Line:
 
 
 class TrackMap:
-    def __init__(self, map_dir='map'):
+    def __init__(self, map_dir=None):
+        map_dir = map_dir or Path(__file__).resolve().parents[1] / 'tram_backup_odometry' / 'maps'
         self.lines = {k: _Line(Path(map_dir) / f'track_{k}.csv') for k in DIRECTIONS}
         self.direction = None
 
